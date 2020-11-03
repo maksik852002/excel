@@ -9,7 +9,14 @@
       "semi": "off",
       "comma-dangle": "off",
       "arrow-parens": "off",
-      "require-jsdoc": "off"
+      "require-jsdoc": "off",
+      "object-curly-spacing": "off",
+      "padded-blocks": "off",
+      "operator-linebreak": "off",
+      "no-trailing-spaces": "off",
+      "max-len": "off",
+      "no-unused-vars": "off",
+      "indent": "off"
     },
     "extends": ["eslint:recommended", "google"]
   }
