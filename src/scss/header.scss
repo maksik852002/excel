@@ -30,11 +30,10 @@
     &:focus {
       border: 2px solid #1a73e8;
     }
-
   }
 
   .button {
-    @include button(green);
+    @include button(red);
   }
 
 }

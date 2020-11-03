@@ -18,12 +18,12 @@ class Dom {
     return this
   }
 
-  on(eventType, cb) {
-    this.$el.addEventListener(eventType, cb)
+  on(eventType, callback) {
+    this.$el.addEventListener(eventType, callback)
   }
 
-  off(eventType, cb) {
-    this.$el.removeEventListener(eventType, cb)
+  off(eventType, callback) {
+    this.$el.removeEventListener(eventType, callback)
   }
 
   append(node) {
@@ -36,12 +36,32 @@ class Dom {
     } else {
       this.$el.appendChild(node)
     }
+
     return this
+  }
+
+  get data() {
+    return this.$el.dataset
+  }
+
+  closest(selector) {
+    return $(this.$el.closest(selector))
+  }
+
+  getCoords() {
+    return this.$el.getBoundingClientRect()
+  }
+
+  findAll(selector) {
+    return this.$el.querySelectorAll(selector)
+  }
+
+  css(styles = {}) {
+    Object.keys(styles).map(key => this.$el.style[key] = styles[key])
   }
 }
 
-$('div').html()
-
+// event.target
 export function $(selector) {
   return new Dom(selector)
 }
