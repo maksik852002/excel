@@ -1,4 +1,4 @@
-import { $ } from '@core/dom'
+import {$} from '@core/dom'
 
 export class Excel {
   constructor(selector, options) {
@@ -7,21 +7,21 @@ export class Excel {
   }
 
   getRoot() {
-    const root = $.create('div', 'exel')
+    const $root = $.create('div', 'excel')
 
     this.components = this.components.map(Component => {
-      const el = $.create('div', Component.className)
-      const component = new Component(el)
-      // // Debug
+      const $el = $.create('div', Component.className)
+      const component = new Component($el)
+      // // DEBUG
       // if (component.name) {
       //   window['c' + component.name] = component
       // }
-      el.html(component.toHTML())
-      root.append(el)
+      $el.html(component.toHTML())
+      $root.append($el)
       return component
     })
 
-    return root
+    return $root
   }
 
   render() {
@@ -29,5 +29,4 @@ export class Excel {
 
     this.components.forEach(component => component.init())
   }
-
 }
