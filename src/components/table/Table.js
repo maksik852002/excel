@@ -5,6 +5,7 @@ import { shouldResize } from '@/components/table/table.func'
 import { TableSelection } from '@/components/table/TableSelection'
 import { isCell, matrix, nextSelector } from './table.func'
 import * as actions from '@/redux/actions'
+import { defaultStyles } from '../../constants'
 import { $ } from '@/core/dom'
 
 export class Table extends ExcelComponent {
@@ -33,15 +34,26 @@ export class Table extends ExcelComponent {
 
     this.$on('formula:input', text => {
       this.selection.current.text(text)
+      this.updateTextInStore(text)
     })
     this.$on('formula:done', () => {
       this.selection.current.focus()
+    })
+    this.$on('toolbar:applyStyle', value => {
+      this.selection.applyStyle(value)
+      this.$dispatch(actions.applyStyle({
+        value,
+        ids: this.selection.selectedIds
+      }))
     })
   }
 
   selectCell($cell) {
     this.selection.select($cell)
     this.$emit('table:select', $cell)
+    const styles = $cell.getStyles(Object.keys(defaultStyles))
+    console.log('Styles to dispatch', styles)
+    this.$dispatch(actions.changeStyles(styles))
   }
 
   async resizeTable(event) {
@@ -79,8 +91,16 @@ export class Table extends ExcelComponent {
     }
   }
 
+  updateTextInStore(value) {
+    this.$dispatch(actions.changeText({
+      id: this.selection.current.id(),
+      value
+    }))
+  }
+
   onInput(event) {
-    this.$emit('table:input', $(event.target))
+    // this.$emit('table:input', $(event.target))
+    this.updateTextInStore($(event.target).text())
   }
 
 }

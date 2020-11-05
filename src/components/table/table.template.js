@@ -1,3 +1,6 @@
+import { defaultStyles } from '../../constants'
+import { toInlineStyles } from '../../core/utils'
+
 const CODES = {
   A: 65,
   Z: 90
@@ -16,13 +19,21 @@ function getHeight(index, state) {
 
 function toCell(row, state) {
   return function(_, col) {
+    const id = `${row}:${col}`
+    const width = getWidth(col, state.colState)
+    const data = state.dataState[id]
+    const styles = toInlineStyles({
+      ...defaultStyles,
+      ...state.stylesState[id]
+    })
+
     return `
     <div class="cell" contenteditable 
       data-col="${col}" 
       data-type="cell" 
-      data-id="${row}:${col}" 
-      style="width: ${getWidth(col, state)}"
-    ></div>
+      data-id="${id}" 
+      style="${styles}; width:${width}"
+    >${data || ''}</div>
   `
   }
 }
@@ -63,7 +74,6 @@ function withWidthFrom(state) {
 }
 
 export function createTable(rowsCount = 15, state = {}) {
-
   const colsCount = CODES.Z - CODES.A + 1 
   const rows = []
 
@@ -79,7 +89,7 @@ export function createTable(rowsCount = 15, state = {}) {
   for (let row = 0; row < rowsCount; row++) {
     const cells = new Array(colsCount)
         .fill('')
-        .map(toCell(row, state.colState))
+        .map(toCell(row, state))
         .join('')
 
     rows.push(createRow(row + 1, cells, state.rowState))
